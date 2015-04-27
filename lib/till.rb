@@ -12,7 +12,13 @@ class Till
   attr_reader :change
 
   def initialize
-    @tax_rate = 1.0864
+    @payment = 0
+    @total = 0
+    @change = 0
+    @tax = 0
+    @pre_tax_total = 0
+    @general_discount = {"percent" => 0, "minimum_spend" => 0}
+    @tax_rate = 0.0864
     @items = Array.new
     @quantity = Array.new
     @price = Array.new
@@ -34,18 +40,27 @@ class Till
   end
 
   def compute
-    @pre_tax_total = line_total.inject(:+)
-    @tax = @tax_rate * @pre_tax_total
+    line_total_sum = line_total.inject(:+).round(2)
+    if line_total_sum >= @general_discount["minimum_spend"]
+      @pre_tax_total = ((1 - @general_discount["percent"]) * line_total_sum).round(2)
+    else
+      @pre_tax_total = line_total_sum
+    end
+    @tax = (@tax_rate * @pre_tax_total).round(2)
     @total = @pre_tax_total + @tax
   end
 
   def pay money
-    @payment = money
+    @payment = money.round(2)
   end
 
   def checkout
     compute
     @change = @payment - @total
+  end
+
+  def add_general_discount percent, minimum_spend
+    @general_discount = {"percent" => percent, "minimum_spend" => minimum_spend}
   end
 
 end
