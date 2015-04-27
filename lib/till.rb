@@ -2,12 +2,14 @@ class Till
 
   attr_accessor :items
   attr_accessor :price
-  attr_accessor :quantity
+  attr_reader :quantity
   attr_reader :line_total
   attr_reader :pre_tax_total
   attr_reader :tax
   attr_reader :tax_rate
   attr_reader :total
+  attr_reader :payment
+  attr_reader :change
 
   def initialize
     @tax_rate = 1.0864
@@ -31,10 +33,19 @@ class Till
     initialize
   end
 
-  def checkout
+  def compute
     @pre_tax_total = line_total.inject(:+)
     @tax = @tax_rate * @pre_tax_total
     @total = @pre_tax_total + @tax
+  end
+
+  def pay money
+    @payment = money
+  end
+
+  def checkout
+    compute
+    @change = @payment - @total
   end
 
 end

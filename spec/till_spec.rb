@@ -16,6 +16,10 @@ describe Till do
     expect(till.items).to eq([])
     expect(till.quantity).to eq([])
     expect(till.price).to eq([])
+    expect(till.line_total).to eq([])
+    expect(till.tax).to eq(nil)
+    expect(till.pre_tax_total).to eq(nil)
+    expect(till.total).to eq(nil)
   end
 
   it 'should add the price of the ordered item' do
@@ -31,21 +35,29 @@ describe Till do
   it 'should calculate the total amount' do
     till.add_entry('Cappucino', 2)
     till.add_entry('Choc Mudcake', 2)
-    till.checkout
+    till.compute
     expect(till.pre_tax_total).to eq(20.50)
   end
 
   it 'should be able to work out the tax' do
     till.add_entry('Cappucino', 2)
     till.add_entry('Choc Mudcake', 1)
-    till.checkout
+    till.compute
     expect(till.tax).to eq(till.pre_tax_total * till.tax_rate)
   end
 
   it 'should be able to work out the total' do
     till.add_entry('Cappucino', 2)
-    till.checkout
+    till.compute
     expect(till.total).to eq(till.pre_tax_total + till.tax)
+  end
+
+  it 'should calculate the change' do
+    till.add_entry('Cappucino', 2)
+    till.compute
+    till.pay(20)
+    till.checkout
+    expect(till.change).to eq(20 - till.total)
   end
 
 
