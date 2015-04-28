@@ -1,0 +1,47 @@
+<div>
+  <table>
+    <tr>
+      <td> Item </td>
+      <td> Price </td>
+      <td> Quantity </td>
+      <td> Line Total </td>
+    </tr>
+    <tr>
+      <td>
+        <% @items.each do |item|%>
+          <div>
+            <%= item %>
+          <div>
+        <% end %>
+      </td>
+      <td>
+        <% @price.each do |price|%>
+          <div>
+            £<%= price %>
+          <div>
+        <% end %>
+      </td>
+      <td>
+        <% @quantity.each do |quantity|%>
+          <div>
+            <%= quantity %>
+          <div>
+        <% end %>
+      </td>
+      <td>
+        <% @line_total.each do |line_total|%>
+          <div>
+            £<%= line_total %>
+          <div>
+        <% end %>
+      </td>
+    </tr>
+  </table>
+
+  <div>Discount: <%= @general_discount * 100%></div>
+  <div>Total: <%=@pre_tax_total%></div>
+  <div>Tax Rate: <%=@tax_rate%></div>
+  <div>Tax: <%=@tax%></div>
+  <div>Total: <%=@total%></div>
+</div>
+<a href="/reset">Reset</a>

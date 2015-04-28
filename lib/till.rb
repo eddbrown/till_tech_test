@@ -1,3 +1,5 @@
+require 'json'
+
 class Till
 
   attr_accessor :items
@@ -10,6 +12,8 @@ class Till
   attr_reader :total
   attr_reader :payment
   attr_reader :change
+  attr_reader :menu
+  attr_reader :general_discount
 
   def initialize
     @payment = 0
@@ -47,7 +51,7 @@ class Till
       @pre_tax_total = line_total_sum
     end
     @tax = (@tax_rate * @pre_tax_total).round(2)
-    @total = @pre_tax_total + @tax
+    @total = (@pre_tax_total + @tax).round(2)
   end
 
   def pay money
